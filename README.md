@@ -31,6 +31,36 @@ Learn2Earn/
 └── hardhat.config.cjs         # Hardhat configuration
 ```
 
+## Quick Test Instructions
+
+### Test the Complete Setup Process:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/z00rs/test-learn2earn.git
+   cd test-learn2earn
+   ```
+
+2. **Run the setup script:**
+   ```bash
+   ./setup.sh
+   ```
+   
+3. **Follow the prompts to configure:**
+   - Your VeChain private key
+   - WalletConnect Project ID (from [Reown.com](https://reown.com))
+   - Moderator key (create a secure password)
+   - VeBetterDAO App ID
+
+4. **After contract deployment, the app will automatically start at:**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:3001
+
+### For Subsequent Runs:
+```bash
+./start.sh  # Quick start with existing configuration
+```
+
 ## Quick Start
 
 ### Option 1: Docker Deployment (Recommended)
@@ -52,8 +82,8 @@ Learn2Earn/
 #### For First-Time Setup (New Projects)
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd learn2earn-herman-test
+git clone https://github.com/z00rs/test-learn2earn.git
+cd test-learn2earn
 
 # Run step-by-step setup script
 ./setup.sh
