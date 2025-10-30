@@ -306,34 +306,19 @@ function AppContent() {
 }
 
 function App() {
-  const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'fallback-project-id';
+  const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'b5af89df66834ee5f8bf5409376f17fa';
   
   log("🔧 Using projectId:", projectId);
   
   return (
     <VeChainKitProvider
       network={{
-        type: 'test',
-        nodeUrl: 'https://testnet.vechain.org/',
-        genesisId: '0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127'
+        type: 'test'
       }}
       dappKit={{
         nodeUrl: 'https://testnet.vechain.org/',
-        genesis: 'test',
-        walletConnectOptions: {
-          projectId: projectId,
-          metadata: {
-            name: 'Learn2Earn',
-            description: 'VeChain Education Platform',
-            url: window.location.origin,
-            icons: [`${window.location.origin}/logo.png`],
-          },
-        },
-        usePersistence: true,
-        useFirstDetectedSource: false,
-        allowedWallets: ['veworld', 'sync2', 'wallet-connect']
+        genesis: 'test'
       }}
-      loginMethods={['vechain', 'wallet']}
     >
       <TransactionModalProvider>
         <AppContent />

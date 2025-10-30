@@ -1,0 +1,32 @@
+FROM node:20-alpine
+
+# Установка рабочей директории
+WORKDIR /app
+
+# Копирование package.json и package-lock.json
+COPY package*.json ./
+
+# Установка зависимостей (включая sqlite3)
+RUN apk add --no-cache python3 make g++ && \
+    npm install --package-lock-only && \
+    npm ci && \
+    apk del python3 make g++
+
+# Копирование бэкенда и необходимых файлов
+COPY backend/ ./backend/
+COPY .env* ./
+COPY contracts/ ./contracts/
+COPY artifacts/ ./artifacts/
+
+# Создание директории для базы данных
+RUN mkdir -p /app/backend && touch /app/backend/submissions.db
+
+# Установка прав доступа
+RUN chown -R node:node /app
+USER node
+
+# Экспорт порта
+EXPOSE 3001
+
+# Запуск бэкенда
+CMD ["node", "backend/server.js"]

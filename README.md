@@ -33,13 +33,89 @@ Learn2Earn/
 
 ## Quick Start
 
-### 1. Installation
+### Option 1: Docker Deployment (Recommended)
+
+**Prerequisites**: 
+1. **Install Docker Desktop** (if not installed):
+   - **macOS**: Download from [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+   - **Windows**: Download from [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop) 
+   - **Linux**: Follow instructions at [docs.docker.com/engine/install](https://docs.docker.com/engine/install)
+
+2. **Verify Docker installation**:
+   ```bash
+   docker --version
+   docker compose version
+   ```
+
+**Step-by-Step Deployment**:
+
+#### For First-Time Setup (New Projects)
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd learn2earn-herman-test
+
+# Run step-by-step setup script
+./setup.sh
+```
+
+The setup script will guide you through:
+1. **Environment configuration** - Edit `.env` with your keys
+2. **Smart contract compilation** - Compile Solidity contracts
+3. **Contract deployment** - Deploy to VeChain testnet
+4. **VeBetterDAO registration** - Register with rewards system
+5. **Contract address update** - Update `.env` with deployed address
+6. **Application launch** - Start all Docker containers
+
+#### For Already Configured Projects
+If you already have a properly configured `.env` file:
+```bash
+./start.sh
+```
+
+#### Required Environment Variables
+Before running setup, prepare these values:
+
+1. **VECHAIN_PRIVATE_KEY**: Your VeChain testnet private key
+2. **VITE_WALLETCONNECT_PROJECT_ID**: Get from [Reown.com](https://reown.com)
+3. **MODERATOR_KEY**: Create a secure key for moderator operations
+4. **VEBETTERDAO_APP_ID**: Obtained during VeBetterDAO app registration
+
+> **Note**: `VITE_CONTRACT_ADDRESS` will be automatically filled during setup
+
+**Management Commands**:
+```bash
+# Stop the application
+docker compose down
+
+# Rebuild and restart
+docker compose up --build -d
+
+# View container status
+docker compose ps
+
+# View individual service logs
+docker compose logs frontend
+docker compose logs backend
+
+# Run contract commands (after setup)
+docker compose run --rm backend npm run compile
+docker compose run --rm backend npm run deploy:testnet
+```
+
+**Available Scripts**:
+- `./setup.sh` - Complete step-by-step setup for new projects
+- `./start.sh` - Quick start for already configured projects
+
+### Option 2: Manual Installation
+
+#### 1. Installation
 
 ```bash
 npm install
 ```
 
-### 2. Environment Setup
+#### 2. Environment Setup
 
 Create a `.env` file:
 
@@ -59,7 +135,7 @@ B3TR_TOKEN=0xbf64cf86894Ee0877C4e7d03936e35Ee8D8b864F
 VEBETTERDAO_APP_ID=your_registered_app_id
 ```
 
-### 3. Contract Deployment
+#### 3. Contract Deployment
 
 ```bash
 # Compile contracts
@@ -75,7 +151,7 @@ npm run register:app
 npm run update:app
 ```
 
-### 4. Start the Application
+#### 4. Start the Application
 
 ```bash
 # Start backend server
@@ -149,6 +225,30 @@ This dApp is integrated with VeBetterDAO's X2Earn system:
 - **Backend**: Node.js + Express
 - **Database**: SQLite
 - **Deployment**: Hardhat
+- **Containerization**: Docker + nginx
+
+## Docker Configuration
+
+This project includes Docker containerization for easy deployment across different environments:
+
+### Container Architecture
+- **Frontend Container**: Multi-stage build with Node.js builder and nginx production server
+- **Backend Container**: Node.js with Express.js and SQLite database
+- **Network**: Isolated Docker network for secure inter-container communication
+- **Volumes**: Persistent storage for SQLite database
+
+### Docker Files
+- `Dockerfile.frontend` - React app with nginx serving
+- `Dockerfile.backend` - Node.js backend with SQLite
+- `docker-compose.yml` - Full application orchestration
+- `.dockerignore` - Optimized build context
+
+### Production Features
+- Optimized multi-stage builds for smaller image sizes
+- Non-root user execution for security
+- Persistent data volumes
+- Automatic container restart
+- Nginx proxy configuration for API calls
 
 ## Recent Updates
 

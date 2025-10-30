@@ -1,0 +1,61 @@
+services:
+  # Development container for contract deployment and setup
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: learn2earn-backend-dev
+    volumes:
+      - .:/app/workspace
+      - backend_data:/app/backend
+    working_dir: /app/workspace
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    networks:
+      - learn2earn-network
+    profiles:
+      - dev
+
+  # Production backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: learn2earn-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    volumes:
+      - backend_data:/app/backend
+    networks:
+      - learn2earn-network
+    profiles:
+      - production
+    restart: unless-stopped
+
+  # Production frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: learn2earn-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - learn2earn-network
+    profiles:
+      - production
+    restart: unless-stopped
+
+volumes:
+  backend_data:
+    driver: local
+
+networks:
+  learn2earn-network:
+    driver: bridge
